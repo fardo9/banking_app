@@ -1,3 +1,12 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "indent": ["error", 4],
+    "quotes": ["error", "single"],
+    "semi": ["error", "never"],
+    "no-unused-vars": "warn",
+    "eqeqeq": ["error", "always"],
+    "no-console": "warn"
+    // "curly": "error"
+  }
 }
