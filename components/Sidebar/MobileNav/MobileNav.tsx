@@ -1,50 +1,37 @@
 'use client'
 
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTrigger,
+} from '@components/ui/sheet'
 import Image from 'next/image'
 import Link from 'next/link'
 import Footer from '../../Footer'
 import SidebarLinks from '../SidebarLinks/SidebarLinks'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 
 const MobileNav = ({ user }: MobileNavProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  const menuRef = useRef<HTMLDivElement | null>(null)
-  const toggleMenu = () => setIsOpen(!isOpen)
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-      setIsOpen(false)
-    }
-  }
-
-  useEffect(() => {
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isOpen])
 
   return (
-    <section className="w-fulll max-w-[320px]">
-      <Image
-        src={!isOpen ? '/icons/hamburger.svg' : '/icons/plus.svg'}
-        width={30}
-        height={30}
-        alt="menu"
-        className="cursor-pointer"
-        onClick={toggleMenu}
-      />
-      {isOpen && (
-        <div
-          className="border-none bg-white left-0 top-0 absolute p-4"
-          ref={menuRef}
-        >
-          <Link href="/" className="cursor-pointer flex items-center gap-1">
+    <section className="w-fulll max-w-[264px]">
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetTrigger>
+          <Image
+            src="/icons/hamburger.svg"
+            width={30}
+            height={30}
+            alt="menu"
+            className="cursor-pointer"
+          />
+        </SheetTrigger>
+        <SheetContent side="left" className="border-none bg-white">
+          <Link
+            href="/"
+            className="cursor-pointer flex items-center gap-1 px-4"
+          >
             <Image
               src="/icons/logo.svg"
               width={34}
@@ -56,15 +43,17 @@ const MobileNav = ({ user }: MobileNavProps) => {
             </h1>
           </Link>
           <div className="mobilenav-sheet">
-            <nav className="flex h-full flex-col gap-6 text-white pt-8">
-              <SidebarLinks isOpen={isOpen} />
-              USER
-            </nav>
+            <SheetClose asChild>
+              <nav className="flex h-full flex-col gap-6 pt-16 text-white">
+                <SidebarLinks isOpen={isOpen} />
+                USER
+              </nav>
+            </SheetClose>
 
             <Footer user={user} type="mobile" />
           </div>
-        </div>
-      )}
+        </SheetContent>
+      </Sheet>
     </section>
   )
 }
